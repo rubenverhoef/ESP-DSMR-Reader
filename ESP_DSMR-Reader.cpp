@@ -3,6 +3,7 @@
 #include <WiFiManager.h>
 #include <ESP8266mDNS.h>
 #include <ArduinoOTA.h>
+#include <ESP8266HTTPClient.h>
 #include <dsmr.h>
 
 // * Include settings
@@ -109,6 +110,34 @@ struct Printer
         }
     }
 };
+
+// **************************************
+// * Send data to backend (DSMR-Reader) *
+// **************************************
+void send_data_to_backend()
+{
+    HTTPClient http;
+    int httpCode = 0;
+
+    if(http.begin(DSMR_READER_ADDRESS) == true)
+    {
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        http.addHeader("X-AUTHKEY", DSMR_READER_API);
+        httpCode = http.POST("Data to Backend");
+        http.writeToStream(&Serial);
+    }
+    http.end();
+
+    if (httpCode != 201)
+    {
+        Serial.println(httpCode);
+    }
+    else
+    {
+        Serial.println("Send sucessfull to DSMR-Reader backend");
+    }
+    
+}
 
 // * Initiate led blinker library
 Ticker ticker;
