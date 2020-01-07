@@ -12,7 +12,7 @@
 // **********************************
 // * P1 DSMR Reader                 *
 // **********************************
-P1Reader reader(&Serial, 2);
+P1Reader reader(&Serial, D8);
 unsigned long last;
 /**
  * Define the data we're interested in, as well as the datastructure to
