@@ -2,43 +2,10 @@
 #include "WiFi.h"
 #include "LED.h"
 #include "P1Reader.h"
-
-#include <ESP8266HTTPClient.h>
+#include "Backend_DSMR-Reader.h"
 
 // * Include settings
 #include "settings.h"
-
-// **************************************
-// * Send data to backend (DSMR-Reader) *
-// **************************************
-void send_data_to_backend()
-{
-    HTTPClient http;
-    int httpCode = 0;
-
-    if(http.begin(DSMR_READER_ADDRESS) == true)
-    {
-        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        http.addHeader("X-AUTHKEY", DSMR_READER_API);
-        httpCode = http.POST("Data to Backend");
-        http.writeToStream(&Serial);
-    }
-    http.end();
-
-    if (httpCode != 201)
-    {
-        Serial.println(httpCode);
-    }
-    else
-    {
-        Serial.println("Send sucessfull to DSMR-Reader backend");
-    }
-    
-}
-
-// **********************************
-// * Setup Main                     *
-// **********************************
 
 unsigned long last;
 P1Reader reader(&Serial, D8);
@@ -100,10 +67,6 @@ void setup()
     reader.enable(true);
     last = millis();
 }
-
-// **********************************
-// * Loop                           *
-// **********************************
 
 void loop()
 {
