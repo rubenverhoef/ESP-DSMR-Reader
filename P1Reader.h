@@ -2,6 +2,9 @@
 // * P1 DSMR Reader                 *
 // **********************************
 
+#ifndef P1READER_H
+#define P1READER_H
+
 #include <dsmr.h>
 
 /**
@@ -100,3 +103,5 @@ struct Printer
         }
     }
 };
+
+#endif /* P1READER_H */
