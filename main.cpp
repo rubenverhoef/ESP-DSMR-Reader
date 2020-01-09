@@ -73,9 +73,9 @@ void loop()
     // Allow the reader to check the serial buffer regularly
     reader.loop();
 
-    // Every minute, fire off a one-off reading
+    // Every x, fire off a one-off reading
     unsigned long now = millis();
-    if (now - last > 60000)
+    if (now - last > TIMEOUT)
     {
         reader.enable(true);
         last = now;
@@ -87,8 +87,12 @@ void loop()
         String err;
         if (reader.parse(&data, &err))
         {
+            Serial.println("/**BEGIN**/");
             // Parse succesful, print result
             data.applyEach(Printer());
+
+            Send_to_DSMR_Reader(data);
+            Serial.println("/***END***/");
         }
         else
         {

@@ -20,6 +20,11 @@
 // * P1 DSMR Reader                 *
 // **********************************
 
+#define TIMEOUT 10000 // Timeout between readings
+
+// * Time zone of P1 message
+#define TIMEZONE 1 // Timezone +1
+
 // * Baud rate for both P1 and debug port
 #define BAUD_RATE 115200
 

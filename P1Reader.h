@@ -7,6 +7,9 @@
 
 #include <dsmr.h>
 
+/* Function prototype for converting data/time */
+String formatDate(String input);
+
 /**
  * Define the data we're interested in, as well as the datastructure to
  * hold the parsed data. This list shows all supported fields, remove
