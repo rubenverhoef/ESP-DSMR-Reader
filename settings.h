@@ -22,16 +22,10 @@
 // * P1 DSMR Reader                 *
 // **********************************
 
-#define TIMEOUT 10000 // Timeout between readings
-
 // * Time zone of P1 message
 #define TIMEZONE 1 // Timezone +1
 
 // * Baud rate for both P1 and debug port
 #define BAUD_RATE 115200
-
-// * DSMR-Reader Settings
-#define DSMR_READER_ADDRESS "http://192.168.0.16:80/api/v2/datalogger/dsmrreading"
-#define DSMR_READER_API "8KI4DM8J2I5I1WXUIOOECWQ4ZC3WFA25OX2LT829N3BNCULZNWHV1NLFPXD0YCBA"
 
 #endif /* SETTINGS_H */

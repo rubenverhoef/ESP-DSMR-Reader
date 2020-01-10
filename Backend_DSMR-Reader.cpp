@@ -88,16 +88,17 @@ String Format_HTTP_data(MyData data)
     return httpData;
 }
 
+extern char dsmrAPI[70]; // API key for DSMR-Reader backend
+extern String dsmrHost; // api http address to DSMR-Reader backend
 void Send_to_DSMR_Reader(MyData data)
 {
     HTTPClient http;
     int httpCode = 0;
     String payload;
-
-    if(http.begin(DSMR_READER_ADDRESS) == true)
+    if(http.begin(dsmrHost) == true)
     {
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        http.addHeader("X-AUTHKEY", DSMR_READER_API);
+        http.addHeader("X-AUTHKEY", dsmrAPI);
         httpCode = http.POST(Format_HTTP_data(data));
         payload = http.getString();
     }
