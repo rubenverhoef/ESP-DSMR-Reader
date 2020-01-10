@@ -17,7 +17,7 @@ void tick()
 }
 
 
-void LED_Blink(int TimeSeconds)
+void LED_Blink(float TimeSeconds)
 {
     if (TimeSeconds <= 0)
     {
