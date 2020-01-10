@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <RemoteDebug.h>
 #include "WiFi.h"
 #include "LED.h"
 #include "P1Reader.h"
@@ -9,6 +10,7 @@
 
 unsigned long last;
 P1Reader reader(&Serial, D8);
+RemoteDebug Debug;
 
 void setup()
 {
@@ -66,6 +68,12 @@ void setup()
     // * Setup P1 DSMR Reader
     reader.enable(true);
     last = millis();
+
+    // DEBUG:
+    Debug.begin(HOSTNAME);
+    Debug.setResetCmdEnabled(true); // Enable the reset command
+    Debug.showColors(true); // Colors
+    Debug.setSerialEnabled(true); // All messages too send to serial too, and can be see in serial monitor
 }
 
 void loop()
@@ -87,18 +95,18 @@ void loop()
         String err;
         if (reader.parse(&data, &err))
         {
-            Serial.println("/**BEGIN**/");
-            // Parse succesful, print result
-            data.applyEach(Printer());
-
+            Debug.printf("/**BEGIN**/\n\r\n\r");
             Send_to_DSMR_Reader(data);
-            Serial.println("/***END***/");
+            Debug.printf("/***END***/\n\r\n\r");
         }
         else
         {
             // Parser error, print error
-            Serial.println(err);
+            Debug.printf("Parser error: %s\n\r", err.c_str());
         }
     }
+    // OTA handler
     ArduinoOTA.handle();
+    // Remote debug over WiFi
+    Debug.handle();
 }

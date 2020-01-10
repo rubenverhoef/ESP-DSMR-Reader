@@ -1,8 +1,11 @@
 #include <Arduino.h>
 #include <ESP8266HTTPClient.h>
+#include <RemoteDebug.h>
 
 #include "settings.h"
 #include "Backend_DSMR-Reader.h"
+
+extern RemoteDebug Debug;
 
 // **********************************
 // * Backend DSMR-Reader            *
@@ -89,23 +92,25 @@ void Send_to_DSMR_Reader(MyData data)
 {
     HTTPClient http;
     int httpCode = 0;
+    String payload;
 
     if(http.begin(DSMR_READER_ADDRESS) == true)
     {
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         http.addHeader("X-AUTHKEY", DSMR_READER_API);
         httpCode = http.POST(Format_HTTP_data(data));
-        http.writeToStream(&Serial);
+        payload = http.getString();
     }
     http.end();
 
     if (httpCode != 201)
     {
-        Serial.println(httpCode);
+        Debug.printf("HTTP response: httpCode: %d\n\r", httpCode);
+        Debug.printf("%s\n\r", payload.c_str());
     }
     else
     {
-        Serial.println("Send sucessfull to DSMR-Reader backend");
+        Debug.printf("Send sucessfull to DSMR-Reader backend\n\r");
     }
     
 }

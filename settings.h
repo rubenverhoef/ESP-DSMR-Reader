@@ -1,3 +1,5 @@
+#ifndef SETTINGS_H
+#define SETTINGS_H
 // **********************************
 // * WIFI                           *
 // **********************************
@@ -31,3 +33,5 @@
 // * DSMR-Reader Settings
 #define DSMR_READER_ADDRESS "http://192.168.0.16:80/api/v2/datalogger/dsmrreading"
 #define DSMR_READER_API "8KI4DM8J2I5I1WXUIOOECWQ4ZC3WFA25OX2LT829N3BNCULZNWHV1NLFPXD0YCBA"
+
+#endif /* SETTINGS_H */
