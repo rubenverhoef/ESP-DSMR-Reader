@@ -10,7 +10,7 @@
 #include "settings.h"
 
 unsigned long last;
-P1Reader reader(&Serial, D8);
+P1Reader reader(&Serial, P1_RTS_PIN);
 RemoteDebug Debug;
 
 char scanInterval[6] = ""; // Scan interval of readings

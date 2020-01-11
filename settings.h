@@ -22,6 +22,9 @@
 // * P1 DSMR Reader                 *
 // **********************************
 
+// * Ready to send pin output
+#define P1_RTS_PIN D8
+
 // * Time zone of P1 message
 #define TIMEZONE 1 // Timezone +1
 
