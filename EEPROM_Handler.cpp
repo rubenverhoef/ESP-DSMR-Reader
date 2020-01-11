@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#include "settings.h"
 #include "EEPROM_Handler.h"
 
 // **********************************
@@ -8,7 +9,7 @@
 
 String read_eeprom(int offset, int len)
 {
-    Serial.print(F("read_eeprom()"));
+    Debug.print(F("read_eeprom()"));
 
     String res = "";
     for (int i = 0; i < len; ++i)
@@ -20,7 +21,7 @@ String read_eeprom(int offset, int len)
 
 void write_eeprom(int offset, int len, String value)
 {
-    Serial.println(F("write_eeprom()"));
+    Debug.println(F("write_eeprom()"));
     for (int i = 0; i < len; ++i)
     {
         if ((unsigned)i < value.length())

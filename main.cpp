@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <RemoteDebug.h>
 #include "EEPROM_Handler.h"
 #include "WiFi.h"
 #include "LED.h"
@@ -36,8 +35,8 @@ void save_wifi_config_callback()
     strcpy(dsmrPort, CUSTOM_DSMR_PORT.getValue());
     strcpy(dsmrAPI, CUSTOM_DSMR_API.getValue());
 
-    Serial.println(F("Should save config"));
-    Serial.println(F("Saving WiFiManager config"));
+    Debug.println(F("Should save config"));
+    Debug.println(F("Saving WiFiManager config"));
 
     write_eeprom(0, 5, scanInterval);
     write_eeprom(6, 21, dsmrIP);
@@ -98,7 +97,7 @@ void setup()
     // * Reset when no connection after 10 seconds
     if (!wifiManager.autoConnect())
     {
-        Serial.println(F("Failed to connect to WIFI and hit timeout"));
+        Debug.println(F("Failed to connect to WIFI and hit timeout"));
 
         // * Reset and try again, or maybe put it to deep sleep
         ESP.reset();
@@ -106,7 +105,7 @@ void setup()
     }
     
     // * If you get here you have connected to the WiFi
-    Serial.println(F("Connected to WIFI..."));
+    Debug.println(F("Connected to WIFI..."));
 
     // * Keep LED on
     LED_Blink(0);
@@ -121,14 +120,14 @@ void setup()
     reader.enable(true);
     last = millis();
 
-    Serial.println("scanInterval:");
-    Serial.println(scanInterval);
-    Serial.println("dsmrIP:");
-    Serial.println(dsmrIP);
-    Serial.println("dsmrPort:");
-    Serial.println(dsmrPort);
-    Serial.println("dsmrAPI:");
-    Serial.println(dsmrAPI);
+    Debug.println("scanInterval:");
+    Debug.println(scanInterval);
+    Debug.println("dsmrIP:");
+    Debug.println(dsmrIP);
+    Debug.println("dsmrPort:");
+    Debug.println(dsmrPort);
+    Debug.println("dsmrAPI:");
+    Debug.println(dsmrAPI);
 
     dsmrHost = "http://";
     dsmrHost += dsmrIP;

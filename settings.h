@@ -1,5 +1,12 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
+
+// **********************************
+// * DEBUG                          *
+// **********************************
+#include <RemoteDebug.h>
+extern RemoteDebug Debug;
+
 // **********************************
 // * WIFI                           *
 // **********************************

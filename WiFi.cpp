@@ -15,11 +15,11 @@ WiFiClient espClient;
 // * Gets called when WiFiManager enters configuration mode
 void configModeCallback(WiFiManager *myWiFiManager)
 {
-    Serial.println(F("Entered config mode"));
-    Serial.println(WiFi.softAPIP());
+    Debug.println(F("Entered config mode"));
+    Debug.println(WiFi.softAPIP());
 
     // * If you used auto generated SSID, print it
-    Serial.println(myWiFiManager->getConfigPortalSSID());
+    Debug.println(myWiFiManager->getConfigPortalSSID());
 
     // * Entered config mode, make led toggle faster
     LED_Blink(0.2);
@@ -31,7 +31,7 @@ void configModeCallback(WiFiManager *myWiFiManager)
 
 void setup_ota()
 {
-    Serial.println(F("Arduino OTA activated."));
+    Debug.println(F("Arduino OTA activated."));
 
     // * Port defaults to 8266
     ArduinoOTA.setPort(8266);
@@ -42,36 +42,36 @@ void setup_ota()
 
     ArduinoOTA.onStart([]()
     {
-        Serial.println(F("Arduino OTA: Start"));
+        Debug.println(F("Arduino OTA: Start"));
     });
 
     ArduinoOTA.onEnd([]()
     {
-        Serial.println(F("Arduino OTA: End (Running reboot)"));
+        Debug.println(F("Arduino OTA: End (Running reboot)"));
     });
 
     ArduinoOTA.onProgress([](unsigned int progress, unsigned int total)
     {
-        Serial.printf("Arduino OTA Progress: %u%%\r", (progress / (total / 100)));
+        Debug.printf("Arduino OTA Progress: %u%%\r", (progress / (total / 100)));
     });
 
     ArduinoOTA.onError([](ota_error_t error)
     {
-        Serial.printf("Arduino OTA Error[%u]: ", error);
+        Debug.printf("Arduino OTA Error[%u]: ", error);
         if (error == OTA_AUTH_ERROR)
-            Serial.println(F("Arduino OTA: Auth Failed"));
+            Debug.println(F("Arduino OTA: Auth Failed"));
         else if (error == OTA_BEGIN_ERROR)
-            Serial.println(F("Arduino OTA: Begin Failed"));
+            Debug.println(F("Arduino OTA: Begin Failed"));
         else if (error == OTA_CONNECT_ERROR)
-            Serial.println(F("Arduino OTA: Connect Failed"));
+            Debug.println(F("Arduino OTA: Connect Failed"));
         else if (error == OTA_RECEIVE_ERROR)
-            Serial.println(F("Arduino OTA: Receive Failed"));
+            Debug.println(F("Arduino OTA: Receive Failed"));
         else if (error == OTA_END_ERROR)
-            Serial.println(F("Arduino OTA: End Failed"));
+            Debug.println(F("Arduino OTA: End Failed"));
     });
 
     ArduinoOTA.begin();
-    Serial.println(F("Arduino OTA finished"));
+    Debug.println(F("Arduino OTA finished"));
 }
 
 // **********************************
@@ -80,7 +80,7 @@ void setup_ota()
 
 void setup_mdns()
 {
-    Serial.println(F("Starting MDNS responder service"));
+    Debug.println(F("Starting MDNS responder service"));
 
     bool mdns_result = MDNS.begin(HOSTNAME);
     if (mdns_result)

@@ -1,11 +1,8 @@
 #include <Arduino.h>
 #include <ESP8266HTTPClient.h>
-#include <RemoteDebug.h>
 
 #include "settings.h"
 #include "Backend_DSMR-Reader.h"
-
-extern RemoteDebug Debug;
 
 // **********************************
 // * Backend DSMR-Reader            *
