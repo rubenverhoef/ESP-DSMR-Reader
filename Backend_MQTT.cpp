@@ -23,14 +23,30 @@ PubSubClient mqtt_client(espClient);
 
 // * Funciton protype
 void send_metric(String name, long metric);
+void send_metric_string(String name, String metric);
 
 void Send_to_MQTT(MyData data)
 {
     send_metric("consumption_low_tarif", data.energy_delivered_tariff1);
     send_metric("consumption_high_tarif", data.energy_delivered_tariff2);
     send_metric("actual_consumption", data.power_delivered);
-    send_metric("instant_power_usage", data.power_delivered);
+    send_metric("instant_power_usage_l1", data.power_delivered_l1);
+    send_metric("instant_power_usage_l2", data.power_delivered_l2);
+    send_metric("instant_power_usage_l3", data.power_delivered_l3);
+    send_metric("instant_power_current_l1", data.current_l1);
+    send_metric("instant_power_current_l2", data.current_l2);
+    send_metric("instant_power_current_l3", data.current_l3);
     send_metric("gas_meter_m3", data.gas_delivered);
+
+    send_metric_string("actual_tarif_group", data.electricity_tariff);
+    send_metric("short_power_outages", data.electricity_failures);
+    send_metric("long_power_outages", data.electricity_long_failures);
+    send_metric("short_power_drops_l1", data.electricity_sags_l1);
+    send_metric("short_power_drops_l2", data.electricity_sags_l2);
+    send_metric("short_power_drops_l3", data.electricity_sags_l3);
+    send_metric("short_power_peaks_l1", data.electricity_swells_l1);
+    send_metric("short_power_peaks_l2", data.electricity_swells_l2);
+    send_metric("short_power_peaks_l3", data.electricity_swells_l3);
 }
 
 //* Connecto to MQTT broker
@@ -42,7 +58,7 @@ void MQTT_connect(void)
 }
 
 // * Send a message to a broker topic
-void send_mqtt_message(const char *topic, char *payload)
+void send_mqtt_message(const char *topic, const char *payload)
 {
     Debug.printf("MQTT Outgoing on %s: ", topic);
     Debug.println(payload);
@@ -102,16 +118,20 @@ bool mqtt_reconnect()
 
 void send_metric(String name, long metric)
 {
+    char output[64+1];
+    ltoa(metric, output, sizeof(output));
+    send_metric_string(name, output);
+}
+
+void send_metric_string(String name, String metric)
+{
     Debug.print(F("Sending metric to broker: "));
     Debug.print(name);
     Debug.print(F("="));
     Debug.println(metric);
 
-    char output[10];
-    ltoa(metric, output, sizeof(output));
-
     String topic = String(MQTT_ROOT_TOPIC) + "/" + name;
-    send_mqtt_message(topic.c_str(), output);
+    send_mqtt_message(topic.c_str(), metric.c_str());
 }
 
 // * MQTT Last reconnection counter
