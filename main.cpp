@@ -15,6 +15,7 @@ RemoteDebug Debug;
 
 bool MQTT_enabled = false;
 bool DSMR_Reader_enabled = false;
+unsigned int scanInterval_INT = 0;
 
 char scanInterval[6] = ""; // Scan interval of readings
 char dsmrIP[16] = ""; // IP to DSMR-Reader backend
@@ -55,16 +56,6 @@ void save_wifi_config_callback()
     Debug.println(F("Should save config"));
     Debug.println(F("Saving WiFiManager config"));
 
-    if (strlen(dsmrIP) == 0)
-        DSMR_Reader_enabled = false;
-    else
-        DSMR_Reader_enabled = true;
-
-    if (strlen(mqttIP) == 0)
-        MQTT_enabled = false;
-    else
-        MQTT_enabled = true;
-
     write_eeprom(0, 5, scanInterval);
     write_eeprom(6, 21, dsmrIP);
     write_eeprom(22, 27, dsmrPort);
@@ -81,6 +72,13 @@ void setup()
 {
     // * Configure Serial
     Serial.begin(BAUD_RATE);
+
+    // DEBUG:
+    Debug.begin(HOSTNAME);
+    Debug.setResetCmdEnabled(true); // Enable the reset command
+    Debug.showColors(true); // Colors
+    Debug.setSerialEnabled(true); // All messages too send to serial too, and can be see in serial monitor
+
     begin_eeprom(512);
 
     // * Wifi reset to default
@@ -159,22 +157,44 @@ void setup()
     reader.enable(true);
     last = millis();
 
+    if (strlen(dsmrIP) == 0)
+        DSMR_Reader_enabled = false;
+    else
+        DSMR_Reader_enabled = true;
+
+    if (strlen(mqttIP) == 0)
+        MQTT_enabled = false;
+    else
+        MQTT_enabled = true;
+
+    scanInterval_INT = (unsigned)atoi(scanInterval);
+    if (scanInterval_INT < MINIMAL_SCAN_INTERVAL)
+    {
+        scanInterval_INT = MINIMAL_SCAN_INTERVAL;
+    }
+
     Debug.println("scanInterval:");
-    Debug.println(scanInterval);
-    Debug.println("dsmrIP:");
-    Debug.println(dsmrIP);
-    Debug.println("dsmrPort:");
-    Debug.println(dsmrPort);
-    Debug.println("dsmrAPI:");
-    Debug.println(dsmrAPI);
-    Debug.println("mqttIP:");
-    Debug.println(mqttIP);
-    Debug.println("mqttPort:");
-    Debug.println(mqttPort);
-    Debug.println("mqttUser:");
-    Debug.println(mqttUser);
-    Debug.println("mqttPass:");
-    Debug.println(mqttPass);
+    Debug.println(scanInterval_INT);
+    if (DSMR_Reader_enabled == true)
+    {
+        Debug.println("dsmrIP:");
+        Debug.println(dsmrIP);
+        Debug.println("dsmrPort:");
+        Debug.println(dsmrPort);
+        Debug.println("dsmrAPI:");
+        Debug.println(dsmrAPI);
+        Debug.println("mqttIP:");
+    }
+    if (MQTT_enabled == true)
+    {
+        Debug.println(mqttIP);
+        Debug.println("mqttPort:");
+        Debug.println(mqttPort);
+        Debug.println("mqttUser:");
+        Debug.println(mqttUser);
+        Debug.println("mqttPass:");
+        Debug.println(mqttPass);
+    }
 
     dsmrHost = "http://";
     dsmrHost += dsmrIP;
@@ -188,11 +208,6 @@ void setup()
         MQTT_connect();
     }
     
-    // DEBUG:
-    Debug.begin(HOSTNAME);
-    Debug.setResetCmdEnabled(true); // Enable the reset command
-    Debug.showColors(true); // Colors
-    Debug.setSerialEnabled(true); // All messages too send to serial too, and can be see in serial monitor
 }
 
 void loop()
@@ -207,10 +222,11 @@ void loop()
 
     // Every x, fire off a one-off reading
     unsigned long now = millis();
-    if (now - last > (unsigned)atoi(scanInterval))
+    if (now - last > scanInterval_INT)
     {
         reader.enable(true);
         last = now;
+        Debug.println("/***GO!***/");
     }
 
     if (reader.available())
@@ -219,12 +235,21 @@ void loop()
         String err;
         if (reader.parse(&data, &err))
         {
-            Debug.printf("/**BEGIN**/\n\r\n\r");
+            Debug.println("/**BEGIN**/");
             if (DSMR_Reader_enabled)
+            {
                 Send_to_DSMR_Reader(data);
+            }
             if (MQTT_enabled)
+            {
                 Send_to_MQTT(data);
-            Debug.printf("/***END***/\n\r\n\r");
+            }
+            if (DSMR_Reader_enabled != true && MQTT_enabled != true)
+            {
+                Debug.println("!!! No backend enabled !!");
+            }
+            Debug.println("/***END***/");
+            Debug.println("");
         }
         else
         {

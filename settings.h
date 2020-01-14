@@ -39,6 +39,9 @@ extern RemoteDebug Debug;
 // * P1 DSMR Reader                 *
 // **********************************
 
+// * Minimal Scan Interval
+#define MINIMAL_SCAN_INTERVAL (1000)
+
 // * Ready to send pin output
 #define P1_RTS_PIN D8
 
