@@ -94,7 +94,7 @@ void setup()
     LED_Blink(0.6);
 
     // * Custom values
-    String settings_available = read_eeprom(98, 1);
+    String settings_available = read_eeprom(181, 1);
 
     if (settings_available == "1")
     { 
