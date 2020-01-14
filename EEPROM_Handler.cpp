@@ -9,7 +9,7 @@
 
 String read_eeprom(int offset, int len)
 {
-    Debug.print(F("read_eeprom()"));
+    Debug.println(F("read_eeprom()"));
 
     String res = "";
     for (int i = 0; i < len; ++i)

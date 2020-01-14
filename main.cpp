@@ -17,7 +17,7 @@ bool MQTT_enabled = false;
 bool DSMR_Reader_enabled = false;
 unsigned int scanInterval_INT = 0;
 
-char scanInterval[6] = ""; // Scan interval of readings
+char scanInterval[3] = ""; // Scan interval of readings
 char dsmrIP[16] = ""; // IP to DSMR-Reader backend
 char dsmrPort[6] = ""; // Port to DSMR-Reader backend
 char dsmrAPI[70] = ""; // API key for DSMR-Reader backend
@@ -28,11 +28,11 @@ char mqttPort[6]  = "";
 char mqttUser[32] = "";
 char mqttPass[32] = "";
 
-WiFiManagerParameter CUSTOM_scanInterval("scanInterval", "Scan Interval", scanInterval, 6);
-WiFiManagerParameter CUSTOM_DSMR_IP("dsmrIP", "DSMR IP", dsmrIP, 16);
+WiFiManagerParameter CUSTOM_scanInterval("scanInterval", "Scan Interval in Seconds", scanInterval, 3);
+WiFiManagerParameter CUSTOM_DSMR_IP("dsmrIP", "DSMR IP (leave blank if unused)", dsmrIP, 16);
 WiFiManagerParameter CUSTOM_DSMR_PORT("dsmrPort", "DSMR Port", dsmrPort, 6);
 WiFiManagerParameter CUSTOM_DSMR_API("dsmrAPI", "DSMR API", dsmrAPI, 70);
-WiFiManagerParameter CUSTOM_MQTT_IP("mqttIP", "MQTT IP", mqttIP, 16);
+WiFiManagerParameter CUSTOM_MQTT_IP("mqttIP", "MQTT IP (leave blank if unused)", mqttIP, 16);
 WiFiManagerParameter CUSTOM_MQTT_PORT("mqttPort", "MQTT Port", mqttPort, 6);
 WiFiManagerParameter CUSTOM_MQTT_USER("mqttUser", "MQTT User", mqttUser, 32);
 WiFiManagerParameter CUSTOM_MQTT_PASS("mqttPass", "MQTT Password", mqttPass, 32);
@@ -53,18 +53,17 @@ void save_wifi_config_callback()
     strcpy(mqttUser, CUSTOM_MQTT_USER.getValue());
     strcpy(mqttPass, CUSTOM_MQTT_PASS.getValue());
 
-    Debug.println(F("Should save config"));
     Debug.println(F("Saving WiFiManager config"));
 
     write_eeprom(0, 5, scanInterval);
-    write_eeprom(6, 21, dsmrIP);
-    write_eeprom(22, 27, dsmrPort);
-    write_eeprom(28, 97, dsmrAPI);
-    write_eeprom(98, 113, mqttIP);
-    write_eeprom(114, 119, mqttPort);
-    write_eeprom(120, 151, mqttUser);
-    write_eeprom(152, 183, mqttPass);
-    write_eeprom(184, 1, "1");
+    write_eeprom(3, 18, dsmrIP);
+    write_eeprom(19, 24, dsmrPort);
+    write_eeprom(25, 94, dsmrAPI);
+    write_eeprom(95, 110, mqttIP);
+    write_eeprom(111, 116, mqttPort);
+    write_eeprom(117, 148, mqttUser);
+    write_eeprom(149, 180, mqttPass);
+    write_eeprom(181, 1, "1");
     commit_eeprom();
 }
 
@@ -99,7 +98,7 @@ void setup()
 
     if (settings_available == "1")
     { 
-        read_eeprom(0, 5).toCharArray(scanInterval, 6);
+        read_eeprom(0, 5).toCharArray(scanInterval, 3);
         read_eeprom(6, 21).toCharArray(dsmrIP, 16);
         read_eeprom(22, 27).toCharArray(dsmrPort, 6);
         read_eeprom(28, 97).toCharArray(dsmrAPI, 70);
@@ -222,7 +221,7 @@ void loop()
 
     // Every x, fire off a one-off reading
     unsigned long now = millis();
-    if (now - last > scanInterval_INT)
+    if (now - last > (scanInterval_INT * 1000))
     {
         reader.enable(true);
         last = now;

@@ -40,7 +40,7 @@ extern RemoteDebug Debug;
 // **********************************
 
 // * Minimal Scan Interval
-#define MINIMAL_SCAN_INTERVAL (1000)
+#define MINIMAL_SCAN_INTERVAL (1) // Seconds
 
 // * Ready to send pin output
 #define P1_RTS_PIN D8
