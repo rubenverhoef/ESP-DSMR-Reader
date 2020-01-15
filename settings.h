@@ -34,9 +34,6 @@ extern RemoteDebug Debug;
 // * MQTT                           *
 // **********************************
 
-// * MQTT network settings
-#define MQTT_MAX_RECONNECT_TRIES 10
-
 // * MQTT root topic
 #define MQTT_ROOT_TOPIC "sensors/power/p1meter"
 

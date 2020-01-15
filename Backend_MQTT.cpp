@@ -74,14 +74,8 @@ void send_mqtt_message(const char *topic, const char *payload)
 // * Reconnect to MQTT server and subscribe to in and out topics
 bool mqtt_reconnect()
 {
-    // * Loop until we're reconnected
-    int MQTT_RECONNECT_RETRIES = 0;
-
-    while (!mqtt_client.connected() && MQTT_RECONNECT_RETRIES < MQTT_MAX_RECONNECT_TRIES)
+    if (!mqtt_client.connected())
     {
-        MQTT_RECONNECT_RETRIES++;
-        Debug.printf("MQTT connection attempt %d / %d ...\n", MQTT_RECONNECT_RETRIES, MQTT_MAX_RECONNECT_TRIES);
-
         // * Attempt to connect
         if (mqtt_client.connect(HOSTNAME, mqttUser, mqttPass))
         {
@@ -99,18 +93,8 @@ bool mqtt_reconnect()
         {
             Debug.print(F("MQTT Connection failed: rc="));
             Debug.println(mqtt_client.state());
-            Debug.println(F(" Retrying in 5 seconds"));
-            Debug.println("");
-
-            // * Wait 5 seconds before retrying
-            delay(5000);
+            return false;
         }
-    }
-
-    if (MQTT_RECONNECT_RETRIES >= MQTT_MAX_RECONNECT_TRIES)
-    {
-        Debug.printf("*** MQTT connection failed, giving up after %d tries ...\n", MQTT_RECONNECT_RETRIES);
-        return false;
     }
 
     return true;
@@ -144,7 +128,7 @@ void MQTT_handle(void)
     {
         long now = millis();
 
-        if (now - LAST_RECONNECT_ATTEMPT > 5000)
+        if (now - LAST_RECONNECT_ATTEMPT > 10000)
         {
             LAST_RECONNECT_ATTEMPT = now;
 
