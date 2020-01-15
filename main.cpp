@@ -28,15 +28,6 @@ char mqttPort[6];
 char mqttUser[32];
 char mqttPass[32];
 
-WiFiManagerParameter CUSTOM_scanInterval("scanInterval", "Scan Interval in Seconds", scanInterval, 3);
-WiFiManagerParameter CUSTOM_DSMR_IP("dsmrIP", "DSMR IP (leave blank if unused)", dsmrIP, 16);
-WiFiManagerParameter CUSTOM_DSMR_PORT("dsmrPort", "DSMR Port", dsmrPort, 6);
-WiFiManagerParameter CUSTOM_DSMR_API("dsmrAPI", "DSMR API", dsmrAPI, 70);
-WiFiManagerParameter CUSTOM_MQTT_IP("mqttIP", "MQTT IP (leave blank if unused)", mqttIP, 16);
-WiFiManagerParameter CUSTOM_MQTT_PORT("mqttPort", "MQTT Port", mqttPort, 6);
-WiFiManagerParameter CUSTOM_MQTT_USER("mqttUser", "MQTT User", mqttUser, 32);
-WiFiManagerParameter CUSTOM_MQTT_PASS("mqttPass", "MQTT Password", mqttPass, 32);
-
 // ******************************************
 // * Callback for saving WIFI config        *
 // ******************************************
@@ -45,15 +36,6 @@ WiFiManagerParameter CUSTOM_MQTT_PASS("mqttPass", "MQTT Password", mqttPass, 32)
 void save_wifi_config_callback()
 {
     int address = 0;
-
-    strcpy(scanInterval, CUSTOM_scanInterval.getValue());
-    strcpy(dsmrIP, CUSTOM_DSMR_IP.getValue());
-    strcpy(dsmrPort, CUSTOM_DSMR_PORT.getValue());
-    strcpy(dsmrAPI, CUSTOM_DSMR_API.getValue());
-    strcpy(mqttIP, CUSTOM_MQTT_IP.getValue());
-    strcpy(mqttPort, CUSTOM_MQTT_PORT.getValue());
-    strcpy(mqttUser, CUSTOM_MQTT_USER.getValue());
-    strcpy(mqttPass, CUSTOM_MQTT_PASS.getValue());
 
     Debug.println(F("Saving WiFiManager config"));
 
@@ -130,6 +112,15 @@ void setup()
         address += sizeof(mqttPass);
     }
 
+    WiFiManagerParameter CUSTOM_scanInterval("scanInterval", "Scan Interval in Seconds", scanInterval, 3);
+    WiFiManagerParameter CUSTOM_DSMR_IP("dsmrIP", "DSMR IP (leave blank if unused)", dsmrIP, 16);
+    WiFiManagerParameter CUSTOM_DSMR_PORT("dsmrPort", "DSMR Port", dsmrPort, 6);
+    WiFiManagerParameter CUSTOM_DSMR_API("dsmrAPI", "DSMR API", dsmrAPI, 70);
+    WiFiManagerParameter CUSTOM_MQTT_IP("mqttIP", "MQTT IP (leave blank if unused)", mqttIP, 16);
+    WiFiManagerParameter CUSTOM_MQTT_PORT("mqttPort", "MQTT Port", mqttPort, 6);
+    WiFiManagerParameter CUSTOM_MQTT_USER("mqttUser", "MQTT User", mqttUser, 32);
+    WiFiManagerParameter CUSTOM_MQTT_PASS("mqttPass", "MQTT Password", mqttPass, 32);
+
     // * WiFiManager local initialization. Once its business is done, there is no need to keep it around
     WiFiManager wifiManager;
 
@@ -164,6 +155,15 @@ void setup()
     
     // * If you get here you have connected to the WiFi
     Debug.println(F("Connected to WIFI..."));
+
+    strcpy(scanInterval, CUSTOM_scanInterval.getValue());
+    strcpy(dsmrIP, CUSTOM_DSMR_IP.getValue());
+    strcpy(dsmrPort, CUSTOM_DSMR_PORT.getValue());
+    strcpy(dsmrAPI, CUSTOM_DSMR_API.getValue());
+    strcpy(mqttIP, CUSTOM_MQTT_IP.getValue());
+    strcpy(mqttPort, CUSTOM_MQTT_PORT.getValue());
+    strcpy(mqttUser, CUSTOM_MQTT_USER.getValue());
+    strcpy(mqttPass, CUSTOM_MQTT_PASS.getValue());
 
     // * Keep LED on
     LED_Blink(0);
