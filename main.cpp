@@ -233,11 +233,6 @@ void setup()
 
 void loop()
 {
-    if (MQTT_enabled)
-    {
-        MQTT_handle();
-    }
-
     // Allow the reader to check the serial buffer regularly
     reader.loop();
 
@@ -277,6 +272,12 @@ void loop()
             // Parser error, print error
             Debug.printf("Parser error: %s\n\r", err.c_str());
         }
+    }
+
+    // MQTT Handler
+    if (MQTT_enabled)
+    {
+        MQTT_handle();
     }
     // OTA handler
     ArduinoOTA.handle();
