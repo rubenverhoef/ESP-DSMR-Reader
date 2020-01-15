@@ -34,6 +34,9 @@ extern RemoteDebug Debug;
 // * MQTT                           *
 // **********************************
 
+// * MQTT network settings
+#define MQTT_RECONNECT_TIMEOUT 30
+
 // * MQTT root topic
 #define MQTT_ROOT_TOPIC "sensors/power/p1meter"
 

@@ -52,14 +52,6 @@ void Send_to_MQTT(MyData data)
     }
 }
 
-//* Connecto to MQTT broker
-void MQTT_connect(void)
-{
-    Debug.printf("MQTT connecting to: %s:%s\n", mqttIP, mqttPort);
-
-    mqtt_client.setServer(atoi(mqttIP), atoi(mqttPort));
-}
-
 // * Send a message to a broker topic
 void send_mqtt_message(const char *topic, const char *payload)
 {
@@ -96,12 +88,23 @@ bool mqtt_reconnect()
         {
             Debug.print(F("MQTT Connection failed: rc="));
             Debug.println(mqtt_client.state());
+            Debug.println(F("Retrying in 30 seconds"));
             return false;
         }
     }
 
     return true;
 }
+
+//* Connecto to MQTT broker
+void MQTT_connect(void)
+{
+    Debug.printf("MQTT connecting to: %s:%s\n", mqttIP, mqttPort);
+
+    mqtt_client.setServer(atoi(mqttIP), atoi(mqttPort));
+    mqtt_reconnect();
+}
+
 
 void send_metric(String name, long metric)
 {
@@ -131,14 +134,17 @@ void MQTT_handle(void)
     {
         long now = millis();
 
-        if (now - LAST_RECONNECT_ATTEMPT > 10000)
+        if (now - LAST_RECONNECT_ATTEMPT >= (MQTT_RECONNECT_TIMEOUT * 1000))
         {
-            LAST_RECONNECT_ATTEMPT = now;
-
-            if (mqtt_reconnect())
+            if (mqtt_reconnect() == true)
             {
                 LAST_RECONNECT_ATTEMPT = 0;
             }
+            else
+            {
+                LAST_RECONNECT_ATTEMPT = now;
+            }
+            
         }
     }
     else
