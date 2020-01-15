@@ -22,6 +22,11 @@ String Format_HTTP_data(MyData data)
         httpData += "&electricity_currently_delivered=";
         httpData += data.power_delivered;
     }
+    if (data.power_returned_present)
+    {
+        httpData += "&electricity_currently_returned=";
+        httpData += data.power_returned;
+    }
     if (data.energy_delivered_tariff1_present)
     {
         httpData += "&electricity_delivered_1=";
