@@ -9,7 +9,11 @@
 
 String read_eeprom(int offset, int len)
 {
-    Debug.println(F("read_eeprom()"));
+    Debug.print("read_eeprom(");
+    Debug.print(offset);
+    Debug.print(", ");
+    Debug.print(len);
+    Debug.println(")");
 
     String res = "";
     for (int i = 0; i < len; ++i)
@@ -21,7 +25,14 @@ String read_eeprom(int offset, int len)
 
 void write_eeprom(int offset, int len, String value)
 {
-    Debug.println(F("write_eeprom()"));
+    Debug.print("write_eeprom(");
+    Debug.print(offset);
+    Debug.print(", ");
+    Debug.print(len);
+    Debug.print(", ");
+    Debug.print(value);
+    Debug.println(")");
+    
     for (int i = 0; i < len; ++i)
     {
         if ((unsigned)i < value.length())

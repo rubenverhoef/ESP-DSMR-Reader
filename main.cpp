@@ -17,16 +17,16 @@ bool MQTT_enabled = false;
 bool DSMR_Reader_enabled = false;
 unsigned int scanInterval_INT = 0;
 
-char scanInterval[3] = ""; // Scan interval of readings
-char dsmrIP[16] = ""; // IP to DSMR-Reader backend
-char dsmrPort[6] = ""; // Port to DSMR-Reader backend
-char dsmrAPI[70] = ""; // API key for DSMR-Reader backend
+char scanInterval[3]; // Scan interval of readings
+char dsmrIP[16]; // IP to DSMR-Reader backend
+char dsmrPort[6]; // Port to DSMR-Reader backend
+char dsmrAPI[70]; // API key for DSMR-Reader backend
 String dsmrHost;
 
-char mqttIP[16] = "";
-char mqttPort[6]  = "";
-char mqttUser[32] = "";
-char mqttPass[32] = "";
+char mqttIP[16];
+char mqttPort[6];
+char mqttUser[32];
+char mqttPass[32];
 
 WiFiManagerParameter CUSTOM_scanInterval("scanInterval", "Scan Interval in Seconds", scanInterval, 3);
 WiFiManagerParameter CUSTOM_DSMR_IP("dsmrIP", "DSMR IP (leave blank if unused)", dsmrIP, 16);
@@ -44,6 +44,8 @@ WiFiManagerParameter CUSTOM_MQTT_PASS("mqttPass", "MQTT Password", mqttPass, 32)
 // * Callback notifying us of the need to save config
 void save_wifi_config_callback()
 {
+    int address = 0;
+
     strcpy(scanInterval, CUSTOM_scanInterval.getValue());
     strcpy(dsmrIP, CUSTOM_DSMR_IP.getValue());
     strcpy(dsmrPort, CUSTOM_DSMR_PORT.getValue());
@@ -55,15 +57,24 @@ void save_wifi_config_callback()
 
     Debug.println(F("Saving WiFiManager config"));
 
-    write_eeprom(0, 5, scanInterval);
-    write_eeprom(3, 18, dsmrIP);
-    write_eeprom(19, 24, dsmrPort);
-    write_eeprom(25, 94, dsmrAPI);
-    write_eeprom(95, 110, mqttIP);
-    write_eeprom(111, 116, mqttPort);
-    write_eeprom(117, 148, mqttUser);
-    write_eeprom(149, 180, mqttPass);
-    write_eeprom(181, 1, "1");
+    address = 0;
+    write_eeprom(address, sizeof(scanInterval), scanInterval);
+    address += sizeof(scanInterval);
+    write_eeprom(address, sizeof(dsmrIP), dsmrIP);
+    address += sizeof(dsmrIP);
+    write_eeprom(address, sizeof(dsmrPort), dsmrPort);
+    address += sizeof(dsmrPort);
+    write_eeprom(address, sizeof(dsmrAPI), dsmrAPI);
+    address += sizeof(dsmrAPI);
+    write_eeprom(address, sizeof(mqttIP), mqttIP);
+    address += sizeof(mqttIP);
+    write_eeprom(address, sizeof(mqttPort), mqttPort);
+    address += sizeof(mqttPort);
+    write_eeprom(address, sizeof(mqttUser), mqttUser);
+    address += sizeof(mqttUser);
+    write_eeprom(address, sizeof(mqttPass), mqttPass);
+    address += sizeof(mqttPass);
+    write_eeprom(EMULATED_EEPROM_SIZE - 1, 1, "1");
     commit_eeprom();
 }
 
@@ -78,7 +89,7 @@ void setup()
     Debug.showColors(true); // Colors
     Debug.setSerialEnabled(true); // All messages too send to serial too, and can be see in serial monitor
 
-    begin_eeprom(512);
+    begin_eeprom(EMULATED_EEPROM_SIZE);
 
     // * Wifi reset to default
     pinMode(WIFI_DEFAULT_PIN, INPUT_PULLDOWN_16 );
@@ -94,18 +105,27 @@ void setup()
     LED_Blink(0.6);
 
     // * Custom values
-    String settings_available = read_eeprom(181, 1);
+    int address = 0;
+    String settings_available = read_eeprom(EMULATED_EEPROM_SIZE - 1, 1);
 
     if (settings_available == "1")
-    { 
-        read_eeprom(0, 5).toCharArray(scanInterval, 3);
-        read_eeprom(6, 21).toCharArray(dsmrIP, 16);
-        read_eeprom(22, 27).toCharArray(dsmrPort, 6);
-        read_eeprom(28, 97).toCharArray(dsmrAPI, 70);
-        read_eeprom(98, 113).toCharArray(mqttIP, 16);
-        read_eeprom(114, 119).toCharArray(mqttPort, 6);
-        read_eeprom(120, 151).toCharArray(mqttUser, 32);
-        read_eeprom(152, 183).toCharArray(mqttPass, 32);
+    {
+        read_eeprom(address, sizeof(scanInterval)).toCharArray(scanInterval, sizeof(scanInterval));
+        address += sizeof(scanInterval);
+        read_eeprom(address, sizeof(dsmrIP)).toCharArray(dsmrIP, sizeof(dsmrIP));
+        address += sizeof(dsmrIP);
+        read_eeprom(address, sizeof(dsmrPort)).toCharArray(dsmrPort, sizeof(dsmrPort));
+        address += sizeof(dsmrPort);
+        read_eeprom(address, sizeof(dsmrAPI)).toCharArray(dsmrAPI, sizeof(dsmrAPI));
+        address += sizeof(dsmrAPI);
+        read_eeprom(address, sizeof(mqttIP)).toCharArray(mqttIP, sizeof(mqttIP));
+        address += sizeof(mqttIP);
+        read_eeprom(address, sizeof(mqttPort)).toCharArray(mqttPort, sizeof(mqttPort));
+        address += sizeof(mqttPort);
+        read_eeprom(address, sizeof(mqttUser)).toCharArray(mqttUser, sizeof(mqttUser));
+        address += sizeof(mqttUser);
+        read_eeprom(address, sizeof(mqttPass)).toCharArray(mqttPass, sizeof(mqttPass));
+        address += sizeof(mqttPass);
     }
 
     // * WiFiManager local initialization. Once its business is done, there is no need to keep it around
@@ -182,10 +202,10 @@ void setup()
         Debug.println(dsmrPort);
         Debug.println("dsmrAPI:");
         Debug.println(dsmrAPI);
-        Debug.println("mqttIP:");
     }
     if (MQTT_enabled == true)
     {
+        Debug.println("mqttIP:");
         Debug.println(mqttIP);
         Debug.println("mqttPort:");
         Debug.println(mqttPort);
