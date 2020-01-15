@@ -98,6 +98,8 @@ void setup()
         WiFi.disconnect();
     }
 
+    WiFi.hostname(HOSTNAME);
+    
     // * Set led pin as output
     pinMode(LED_BUILTIN, OUTPUT);
 
