@@ -71,6 +71,7 @@ void processCmdRemoteDebug() {
         Debug.println("Resetting platform to factory...");
         delay(5000);
         WiFi.disconnect();
+        delay(5000);
         ESP.reset();
 	}
 }
