@@ -141,6 +141,14 @@ void setup()
     WiFiManagerParameter CUSTOM_MQTT_PORT("mqttPort", "MQTT Port", mqttPort, 6);
     WiFiManagerParameter CUSTOM_MQTT_USER("mqttUser", "MQTT User", mqttUser, 32);
     WiFiManagerParameter CUSTOM_MQTT_PASS("mqttPass", "MQTT Password", mqttPass, 32);
+    WiFiManagerParameter CUSTOM_scanInterval("scanInterval", "Scan Interval in Seconds", scanInterval, sizeof(scanInterval));
+    WiFiManagerParameter CUSTOM_DSMR_IP("dsmrIP", "DSMR IP (leave blank if unused)", dsmrIP, sizeof(dsmrIP));
+    WiFiManagerParameter CUSTOM_DSMR_PORT("dsmrPort", "DSMR Port", dsmrPort, sizeof(dsmrPort));
+    WiFiManagerParameter CUSTOM_DSMR_API("dsmrAPI", "DSMR API", dsmrAPI, sizeof(dsmrAPI));
+    WiFiManagerParameter CUSTOM_MQTT_IP("mqttIP", "MQTT IP (leave blank if unused)", mqttIP, sizeof(mqttIP));
+    WiFiManagerParameter CUSTOM_MQTT_PORT("mqttPort", "MQTT Port", mqttPort, sizeof(mqttPort));
+    WiFiManagerParameter CUSTOM_MQTT_USER("mqttUser", "MQTT User", mqttUser, sizeof(mqttUser));
+    WiFiManagerParameter CUSTOM_MQTT_PASS("mqttPass", "MQTT Password", mqttPass, sizeof(mqttPass));
 
     // * WiFiManager local initialization. Once its business is done, there is no need to keep it around
     WiFiManager wifiManager;
@@ -150,9 +158,6 @@ void setup()
 
     // * Set timeout
     wifiManager.setConfigPortalTimeout(WIFI_TIMEOUT);
-
-    // * Set save config callback
-    wifiManager.setSaveConfigCallback(save_wifi_config_callback);
 
     wifiManager.addParameter(&CUSTOM_scanInterval);
     wifiManager.addParameter(&CUSTOM_DSMR_IP);
@@ -185,6 +190,8 @@ void setup()
     strcpy(mqttPort, CUSTOM_MQTT_PORT.getValue());
     strcpy(mqttUser, CUSTOM_MQTT_USER.getValue());
     strcpy(mqttPass, CUSTOM_MQTT_PASS.getValue());
+
+    save_wifi_config_callback();
 
     // * Keep LED on
     LED_Blink(0);
