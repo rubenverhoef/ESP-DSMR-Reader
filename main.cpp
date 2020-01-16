@@ -60,6 +60,21 @@ void save_wifi_config_callback()
     commit_eeprom();
 }
 
+// Process commands from RemoteDebug
+
+void processCmdRemoteDebug() {
+
+	String lastCmd = Debug.getLastCommand();
+
+	if (lastCmd == "factory")
+    {
+        Debug.println("Resetting platform to factory...");
+        delay(5000);
+        WiFi.disconnect();
+        ESP.reset();
+	}
+}
+
 void setup()
 {
     // * Configure Serial
@@ -70,6 +85,12 @@ void setup()
     Debug.setResetCmdEnabled(true); // Enable the reset command
     Debug.showColors(true); // Colors
     Debug.setSerialEnabled(true); // All messages too send to serial too, and can be see in serial monitor
+
+	// Project commands
+	String factoryCMD = "factory - Reset to factory settings 1\n";
+
+	Debug.setHelpProjectsCmds(factoryCMD);
+	Debug.setCallBackProjectCmds(&processCmdRemoteDebug);
 
     begin_eeprom(EMULATED_EEPROM_SIZE);
 
