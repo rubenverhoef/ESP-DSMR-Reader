@@ -7,6 +7,6 @@
 
 #include "P1Reader.h"
 
-void Send_to_DSMR_Reader(MyData data);
+void Send_to_DSMR_Reader(MyData data, MyData LastData);
 
 #endif /* BACKEND_DSMR_READER_H */

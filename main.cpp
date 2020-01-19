@@ -10,6 +10,7 @@
 #include "settings.h"
 
 unsigned long last;
+MyData LastData;
 P1Reader reader(&Serial, P1_RTS_PIN);
 RemoteDebug Debug;
 
@@ -275,7 +276,7 @@ void loop()
             Debug.println("/**BEGIN**/");
             if (DSMR_Reader_enabled)
             {
-                Send_to_DSMR_Reader(data);
+                Send_to_DSMR_Reader(data, LastData);
             }
             if (MQTT_enabled)
             {
@@ -285,6 +286,7 @@ void loop()
             {
                 Debug.println("!!! No backend enabled !!");
             }
+            LastData = data;
             Debug.println("/***END***/");
             Debug.println("");
         }
