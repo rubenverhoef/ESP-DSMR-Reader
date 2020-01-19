@@ -101,7 +101,7 @@ void MQTT_connect(void)
 {
     Debug.printf("MQTT connecting to: %s:%s\n", mqttIP, mqttPort);
 
-    mqtt_client.setServer(atoi(mqttIP), atoi(mqttPort));
+    mqtt_client.setServer(mqttIP, atoi(mqttPort));
     mqtt_reconnect();
 }
 
