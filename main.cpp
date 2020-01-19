@@ -280,7 +280,7 @@ void loop()
             }
             if (MQTT_enabled)
             {
-                Send_to_MQTT(data);
+                Send_to_MQTT(data, LastData);
             }
             if (DSMR_Reader_enabled != true && MQTT_enabled != true)
             {

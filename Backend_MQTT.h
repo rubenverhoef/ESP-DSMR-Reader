@@ -7,7 +7,7 @@
 
 #include "P1Reader.h"
 
-void Send_to_MQTT(MyData data);
+void Send_to_MQTT(MyData data, MyData LastData);
 void MQTT_handle(void);
 void MQTT_connect(void);
 

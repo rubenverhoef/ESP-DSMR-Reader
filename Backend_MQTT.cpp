@@ -22,33 +22,113 @@ extern char mqttPass[32];
 PubSubClient mqtt_client(espClient);
 
 // * Funciton protype
-void send_metric(String name, long metric);
+void send_metric(String name, double metric);
 void send_metric_string(String name, String metric);
 
-void Send_to_MQTT(MyData data)
+void Send_to_MQTT(MyData data, MyData LastData)
 {
     if (mqtt_client.connected())
     {
-        send_metric("consumptio n_low_tarif", data.energy_delivered_tariff1);
-        send_metric("consumption_high_tarif", data.energy_delivered_tariff2);
-        send_metric("actual_consumption", data.power_delivered);
-        send_metric("instant_power_usage_l1", data.power_delivered_l1);
-        send_metric("instant_power_usage_l2", data.power_delivered_l2);
-        send_metric("instant_power_usage_l3", data.power_delivered_l3);
-        send_metric("instant_power_current_l1", data.current_l1);
-        send_metric("instant_power_current_l2", data.current_l2);
-        send_metric("instant_power_current_l3", data.current_l3);
-        send_metric("gas_meter_m3", data.gas_delivered);
-
-        send_metric_string("actual_tarif_group", data.electricity_tariff);
-        send_metric("short_power_outages", data.electricity_failures);
-        send_metric("long_power_outages", data.electricity_long_failures);
-        send_metric("short_power_drops_l1", data.electricity_sags_l1);
-        send_metric("short_power_drops_l2", data.electricity_sags_l2);
-        send_metric("short_power_drops_l3", data.electricity_sags_l3);
-        send_metric("short_power_peaks_l1", data.electricity_swells_l1);
-        send_metric("short_power_peaks_l2", data.electricity_swells_l2);
-        send_metric("short_power_peaks_l3", data.electricity_swells_l3);
+        if (data.power_delivered_present && data.power_delivered != LastData.power_delivered)
+        {
+            send_metric("power_delivered", data.power_delivered);
+        }
+        if (data.power_returned_present && data.power_returned != LastData.power_returned)
+        {
+            send_metric("power_returned", data.power_returned);
+        }
+        if (data.energy_delivered_tariff1_present && data.energy_delivered_tariff1 != LastData.energy_delivered_tariff1)
+        {
+            send_metric("energy_delivered_tariff1", data.energy_delivered_tariff1);
+        }
+        if (data.energy_delivered_tariff2_present && data.energy_delivered_tariff2 != LastData.energy_delivered_tariff2)
+        {
+            send_metric("energy_delivered_tariff2", data.energy_delivered_tariff2);
+        }
+        if (data.energy_returned_tariff1_present && data.energy_returned_tariff1 != LastData.energy_returned_tariff1)
+        {
+            send_metric("energy_returned_tariff1", data.energy_returned_tariff1);
+        }
+        if (data.energy_returned_tariff2_present && data.energy_returned_tariff2 != LastData.energy_returned_tariff2)
+        {
+            send_metric("energy_returned_tariff2", data.energy_returned_tariff2);
+        }
+        if (data.power_delivered_l1_present && data.power_delivered_l1 != LastData.power_delivered_l1)
+        {
+            send_metric("power_delivered_l1", data.power_delivered_l1);
+        }
+        if (data.power_delivered_l2_present && data.power_delivered_l2 != LastData.power_delivered_l2)
+        {
+            send_metric("power_delivered_l2", data.power_delivered_l2);
+        }
+        if (data.power_delivered_l3_present && data.power_delivered_l3 != LastData.power_delivered_l3)
+        {
+            send_metric("power_delivered_l3", data.power_delivered_l3);
+        }
+        if (data.power_returned_l1_present && data.power_returned_l1 != LastData.power_returned_l1)
+        {
+            send_metric("power_returned_l1", data.power_returned_l1);
+        }
+        if (data.power_returned_l2_present && data.power_returned_l2 != LastData.power_returned_l2)
+        {
+            send_metric("power_returned_l2", data.power_returned_l2);
+        }
+        if (data.power_returned_l3_present && data.power_returned_l3 != LastData.power_returned_l3)
+        {
+            send_metric("power_returned_l3", data.power_returned_l3);
+        }
+        if (data.gas_delivered_present && data.gas_delivered != LastData.gas_delivered)
+        {
+            send_metric("gas_delivered", data.gas_delivered);
+        }
+        if (data.current_l1_present && data.current_l1 != LastData.current_l1)
+        {
+            send_metric("current_l1", data.current_l1);
+        }
+        if (data.current_l2_present && data.current_l2 != LastData.current_l2)
+        {
+            send_metric("current_l2", data.current_l2);
+        }
+        if (data.current_l3_present && data.current_l3 != LastData.current_l3)
+        {
+            send_metric("current_l3", data.current_l3);
+        }
+        if (data.electricity_tariff_present && data.electricity_tariff != LastData.electricity_tariff)
+        {
+            send_metric_string("electricity_tariff", data.electricity_tariff);
+        }
+        if (data.electricity_failures_present && data.electricity_failures != LastData.electricity_failures)
+        {
+            send_metric("electricity_failures", data.electricity_failures);
+        }
+        if (data.electricity_long_failures_present && data.electricity_long_failures != LastData.electricity_long_failures)
+        {
+            send_metric("electricity_long_failures", data.electricity_long_failures);
+        }
+        if (data.electricity_sags_l1_present && data.electricity_sags_l1 != LastData.electricity_sags_l1)
+        {
+            send_metric("electricity_sags_l1", data.electricity_sags_l1);
+        }
+        if (data.electricity_sags_l2_present && data.electricity_sags_l2 != LastData.electricity_sags_l2)
+        {
+            send_metric("electricity_sags_l2", data.electricity_sags_l2);
+        }
+        if (data.electricity_sags_l3_present && data.electricity_sags_l3 != LastData.electricity_sags_l3)
+        {
+            send_metric("electricity_sags_l3", data.electricity_sags_l3);
+        }
+        if (data.electricity_swells_l1_present && data.electricity_swells_l1 != LastData.electricity_swells_l1)
+        {
+            send_metric("electricity_swells_l1", data.electricity_swells_l1);
+        }
+        if (data.electricity_swells_l2_present && data.electricity_swells_l2 != LastData.electricity_swells_l2)
+        {
+            send_metric("electricity_swells_l2", data.electricity_swells_l2);
+        }
+        if (data.electricity_swells_l3_present && data.electricity_swells_l3 != LastData.electricity_swells_l3)
+        {
+            send_metric("electricity_swells_l3", data.electricity_swells_l3);
+        }
     }
 }
 
@@ -106,10 +186,10 @@ void MQTT_connect(void)
 }
 
 
-void send_metric(String name, long metric)
+void send_metric(String name, double metric)
 {
     char output[64+1];
-    ltoa(metric, output, sizeof(output));
+    snprintf(output, sizeof(output), "%g", metric);
     send_metric_string(name, output);
 }
 
