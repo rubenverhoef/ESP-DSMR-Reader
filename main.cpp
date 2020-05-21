@@ -9,6 +9,9 @@
 // * Include settings
 #include "settings.h"
 
+double RejectedTelegrams = 0;
+bool NewRejectedTelegram = true;
+
 unsigned long last;
 MyData LastData;
 P1Reader reader(&Serial, P1_RTS_PIN);
@@ -243,7 +246,6 @@ void setup()
     dsmrHost += dsmrIP;
     dsmrHost += ":";
     dsmrHost += dsmrPort;
-    dsmrHost += "/api/v2/datalogger/dsmrreading";
 
     // * Setup MQTT
     if (MQTT_enabled)
@@ -276,7 +278,7 @@ void loop()
             Debug.println("/**BEGIN**/");
             if (DSMR_Reader_enabled)
             {
-                Send_to_DSMR_Reader(data, LastData);
+                Send_to_DSMR_Reader(data, LastData, NewRejectedTelegram, RejectedTelegrams);
             }
             if (MQTT_enabled)
             {
@@ -287,6 +289,7 @@ void loop()
                 Debug.println("!!! No backend enabled !!");
             }
             LastData = data;
+            NewRejectedTelegram = false;
             Debug.println("/***END***/");
             Debug.println("");
         }
@@ -294,6 +297,8 @@ void loop()
         {
             // Parser error, print error
             Debug.printf("Parser error: %s\n\r", err.c_str());
+            RejectedTelegrams++;
+            NewRejectedTelegram = true;
         }
     }
 
