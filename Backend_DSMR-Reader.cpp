@@ -80,6 +80,36 @@ String Format_HTTP_data(MyData data, MyData LastData)
         httpData += "&phase_currently_returned_l3=";
         httpData += Double2String(data.power_returned_l3);
     }
+    if (data.voltage_l1_present && data.voltage_l1 != LastData.voltage_l1)
+    {
+        httpData += "&phase_voltage_l1=";
+        httpData += Double2String(data.voltage_l1);
+    }
+    if (data.voltage_l2_present && data.voltage_l2 != LastData.voltage_l2)
+    {
+        httpData += "&phase_voltage_l2=";
+        httpData += Double2String(data.voltage_l2);
+    }
+    if (data.voltage_l3_present && data.voltage_l3 != LastData.voltage_l3)
+    {
+        httpData += "&phase_voltage_l3=";
+        httpData += Double2String(data.voltage_l3);
+    }
+    if (data.current_l1_present && data.current_l1 != LastData.current_l1)
+    {
+        httpData += "&phase_power_current_l1=";
+        httpData += Double2String(data.current_l1);
+    }
+    if (data.current_l2_present && data.current_l2 != LastData.current_l2)
+    {
+        httpData += "&phase_power_current_l2=";
+        httpData += Double2String(data.current_l2);
+    }
+    if (data.current_l3_present && data.current_l3 != LastData.current_l3)
+    {
+        httpData += "&phase_power_current_l3=";
+        httpData += Double2String(data.current_l3);
+    }
     if (data.gas_delivered_present && data.gas_delivered != LastData.gas_delivered)
     {
         httpData += "&extra_device_timestamp=";

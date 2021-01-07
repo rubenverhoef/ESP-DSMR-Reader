@@ -81,6 +81,18 @@ void Send_to_MQTT(MyData data, MyData LastData)
         {
             send_metric("gas_delivered", data.gas_delivered);
         }
+        if (data.voltage_l1_present && data.voltage_l1 != LastData.voltage_l1)
+        {
+            send_metric("voltage_l1", data.voltage_l1);
+        }
+        if (data.voltage_l2_present && data.voltage_l2 != LastData.voltage_l2)
+        {
+            send_metric("voltage_l2", data.voltage_l3);
+        }
+        if (data.voltage_l3_present && data.voltage_l3 != LastData.voltage_l3)
+        {
+            send_metric("voltage_l3", data.voltage_l3);
+        }
         if (data.current_l1_present && data.current_l1 != LastData.current_l1)
         {
             send_metric("current_l1", data.current_l1);
