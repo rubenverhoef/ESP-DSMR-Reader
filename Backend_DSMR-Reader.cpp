@@ -50,67 +50,67 @@ String Format_HTTP_data(MyData data, MyData LastData)
         httpData += "&electricity_returned_2=";
         httpData += Double2String(data.energy_returned_tariff2);
     }
-    if (data.power_delivered_l1_present && data.power_delivered_l1 != LastData.power_delivered_l1)
+    if (data.power_delivered_l1_present)
     {
         httpData += "&phase_currently_delivered_l1=";
         httpData += Double2String(data.power_delivered_l1);
     }
-    if (data.power_delivered_l2_present && data.power_delivered_l2 != LastData.power_delivered_l2)
+    if (data.power_delivered_l2_present)
     {
         httpData += "&phase_currently_delivered_l2=";
         httpData += Double2String(data.power_delivered_l2);
     }
-    if (data.power_delivered_l3_present && data.power_delivered_l3 != LastData.power_delivered_l3)
+    if (data.power_delivered_l3_present)
     {
         httpData += "&phase_currently_delivered_l3=";
         httpData += Double2String(data.power_delivered_l3);
     }
-    if (data.power_returned_l1_present && data.power_returned_l1 != LastData.power_returned_l1)
+    if (data.power_returned_l1_present)
     {
         httpData += "&phase_currently_returned_l1=";
         httpData += Double2String(data.power_returned_l1);
     }
-    if (data.power_returned_l2_present && data.power_returned_l2 != LastData.power_returned_l2)
+    if (data.power_returned_l2_present)
     {
         httpData += "&phase_currently_returned_l2=";
         httpData += Double2String(data.power_returned_l2);
     }
-    if (data.power_returned_l3_present && data.power_returned_l3 != LastData.power_returned_l3)
+    if (data.power_returned_l3_present)
     {
         httpData += "&phase_currently_returned_l3=";
         httpData += Double2String(data.power_returned_l3);
     }
-    if (data.voltage_l1_present && data.voltage_l1 != LastData.voltage_l1)
+    if (data.voltage_l1_present)
     {
         httpData += "&phase_voltage_l1=";
         httpData += Double2String(data.voltage_l1);
     }
-    if (data.voltage_l2_present && data.voltage_l2 != LastData.voltage_l2)
+    if (data.voltage_l2_present)
     {
         httpData += "&phase_voltage_l2=";
         httpData += Double2String(data.voltage_l2);
     }
-    if (data.voltage_l3_present && data.voltage_l3 != LastData.voltage_l3)
+    if (data.voltage_l3_present)
     {
         httpData += "&phase_voltage_l3=";
         httpData += Double2String(data.voltage_l3);
     }
-    if (data.current_l1_present && data.current_l1 != LastData.current_l1)
+    if (data.current_l1_present)
     {
         httpData += "&phase_power_current_l1=";
         httpData += Double2String(data.current_l1);
     }
-    if (data.current_l2_present && data.current_l2 != LastData.current_l2)
+    if (data.current_l2_present)
     {
         httpData += "&phase_power_current_l2=";
         httpData += Double2String(data.current_l2);
     }
-    if (data.current_l3_present && data.current_l3 != LastData.current_l3)
+    if (data.current_l3_present)
     {
         httpData += "&phase_power_current_l3=";
         httpData += Double2String(data.current_l3);
     }
-    if (data.gas_delivered_present && data.gas_delivered != LastData.gas_delivered)
+    if (data.gas_delivered_present)
     {
         httpData += "&extra_device_timestamp=";
         httpData += formatDate(data.gas_delivered.timestamp);
