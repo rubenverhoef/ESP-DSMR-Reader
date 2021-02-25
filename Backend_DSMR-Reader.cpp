@@ -11,6 +11,9 @@ String Double2String(double metric);
 // * Backend DSMR-Reader            *
 // **********************************
 
+// * WiFi client from WiFi.cpp
+extern WiFiClient espClient;
+
 String Format_HTTP_data(MyData data, MyData LastData)
 {
     String httpData = ("");
@@ -218,7 +221,7 @@ void Send_to_DSMR_Reader(MyData data, MyData LastData, bool NewRejectedTelegram,
     String patchString;
     String patchPayload;
 
-    if(http.begin(dsmrHost + "/api/v2/datalogger/dsmrreading") == true)
+    if(http.begin(espClient, dsmrHost + "/api/v2/datalogger/dsmrreading") == true)
     {
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         http.addHeader("X-AUTHKEY", dsmrAPI);
@@ -244,7 +247,7 @@ void Send_to_DSMR_Reader(MyData data, MyData LastData, bool NewRejectedTelegram,
         Debug.printf("Could not connect to DSMR backend\n\r");
     }
     
-    if (http.begin(dsmrHost + "/api/v2/datalogger/meter-statistics") == true)
+    if (http.begin(espClient, dsmrHost + "/api/v2/datalogger/meter-statistics") == true)
     {
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         http.addHeader("X-AUTHKEY", dsmrAPI);
